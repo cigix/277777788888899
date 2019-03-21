@@ -1,22 +1,20 @@
 #!/usr/bin/env python3
 
-NaN = float('NaN')
-
-def decompose_mod(n, mod):
-    #print("   decompose_mod({}, {})".format(n, mod))
+def capabilities_with(n, mod):
+    if n == 0:
+        return [0]
     if mod == 1:
-        return NaN
+        return []
+    res = []
     if n % mod == 0:
-        return decompose_factor(n // mod) * 10 + mod
-    return decompose_mod(n, mod - 1)
-
-def decompose_factor(n):
-    #print("decompose_factor({})".format(n))
-    if n == 1:
-        return 0
-    return decompose_mod(n, 9)
+        if n < 10:
+            res += [n]
+        res += [i * 10 + mod for i in capabilities_with(n // mod, 9)]
+    res += capabilities_with(n, mod -1)
+    return res
 
 def decompose(n):
-    if n < 10:
-        return 10 + n
-    return decompose_factor(n)
+    res = sorted(set(capabilities_with(n, 9)))
+    if 1 < n < 10:
+        res.remove(n)
+    return res
