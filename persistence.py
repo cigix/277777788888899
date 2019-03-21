@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 
-def decompose(n):
-    def decompose_inner(n):
-        print("decompose({})".format(n))
-        if n == 0:
-            return [0]
-        def decompose_step(n, mod):
-            print("    step({}, {})".format(n, mod))
-            if mod == 1:
-                return []
-            if n % mod == 0:
-                return [mod] + decompose_inner(n // mod)
-            return decompose_step(n, mod - 1)
-        return decompose_step(n, 9)
-    return sorted(decompose_inner(n))
+NaN = float('NaN')
 
-print(decompose(54))
+def decompose_mod(n, mod):
+    #print("   decompose_mod({}, {})".format(n, mod))
+    if mod == 1:
+        return NaN
+    if n % mod == 0:
+        return decompose_factor(n // mod) * 10 + mod
+    return decompose_mod(n, mod - 1)
+
+def decompose_factor(n):
+    #print("decompose_factor({})".format(n))
+    if n == 1:
+        return 0
+    return decompose_mod(n, 9)
+
+def decompose(n):
+    if n < 10:
+        return 10 + n
+    return decompose_factor(n)
