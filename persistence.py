@@ -20,20 +20,22 @@ def decompose(n):
     return res
 
 if __name__ == '__main__':
-    persistence = dict()
-    for i in range(10):
-        persistence[i] = 1
-    todo = list(range(1, 10))
+    persistence = {0: 1}
     most_persistent = 0
-    while todo:
-        n = todo.pop(0)
-        multiples = decompose(n)
-        for m in multiples:
-            persistence[m] = persistence[n] + 1
-            if persistence[most_persistent] < persistence[m]:
-                most_persistent = m
-            print("persistence of", m, "is", persistence[m])
-        todo = sorted(todo + multiples)
-        print(n, persistence[n], multiples, sep='\t')
+
+    for i in range(1, 100):
+        if i not in persistence.keys():
+            persistence[i] = 1
+        todo = [i]
+        while todo:
+            n = todo.pop(0)
+            multiples = decompose(n)
+            for m in multiples:
+                persistence[m] = persistence[n] + 1
+                if persistence[most_persistent] < persistence[m]:
+                    most_persistent = m
+            todo = sorted(todo + multiples)
+            print(i, n, persistence[n], multiples, sep='\t')
+
     print("most persistent", most_persistent, "with a persistence of",
             persistence[most_persistent])
